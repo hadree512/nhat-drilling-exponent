@@ -1,0 +1,149 @@
+{
+  "overburden": {
+    "rho_mudline": 1.999999999712519,
+    "k_per_m": 0.0003884087860325534
+  },
+  "fitted": {
+    "depth": -1.384320263725071,
+    "ln_w": 0.20807578015676767,
+    "alpha": 0.5152494270900058,
+    "beta": 0.0,
+    "g_ss": -0.31363889505595804,
+    "g_wh": -0.8151662438266193,
+    "n_calib": 1388,
+    "r2_calib": 0.3157291000831649
+  },
+  "k_run_per_Mrev": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": -1.6731257500322025,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": -0.21178390520146112
+  },
+  "normal_interval_m": [
+    350,
+    950
+  ],
+  "fit_interval_m": [
+    350,
+    2300
+  ],
+  "metrics": {
+    "d_surface_rpm": {
+      "n_blind": 21,
+      "bias_sg": -0.0263,
+      "rmse_sg": 0.0307,
+      "mae_sg": 0.0277,
+      "eaton_n": 0.199,
+      "trend_slope_per_km": 0.4345,
+      "rmse_sg_eaton_1p2": 0.3685,
+      "p10_p90_coverage": 0.524,
+      "band_width_sg": 0.0546
+    },
+    "d": {
+      "n_blind": 21,
+      "bias_sg": -0.0246,
+      "rmse_sg": 0.0272,
+      "mae_sg": 0.0246,
+      "eaton_n": 0.13,
+      "trend_slope_per_km": 0.4442,
+      "rmse_sg_eaton_1p2": 0.5418,
+      "p10_p90_coverage": 0.143,
+      "band_width_sg": 0.0238
+    },
+    "Dxc_vendor": {
+      "n_blind": 21,
+      "bias_sg": -0.0259,
+      "rmse_sg": 0.0274,
+      "mae_sg": 0.0259,
+      "eaton_n": 0.121,
+      "trend_slope_per_km": 0.3323,
+      "rmse_sg_eaton_1p2": 0.5666,
+      "p10_p90_coverage": 0.143,
+      "band_width_sg": 0.0206
+    },
+    "Dxc": {
+      "n_blind": 21,
+      "bias_sg": -0.0121,
+      "rmse_sg": 0.0158,
+      "mae_sg": 0.0148,
+      "eaton_n": 0.121,
+      "trend_slope_per_km": 0.3452,
+      "rmse_sg_eaton_1p2": 0.6214,
+      "p10_p90_coverage": 0.476,
+      "band_width_sg": 0.0222
+    },
+    "N_hat": {
+      "n_blind": 21,
+      "bias_sg": -0.0124,
+      "rmse_sg": 0.0152,
+      "mae_sg": 0.0138,
+      "eaton_n": 0.115,
+      "trend_slope_per_km": 0.3502,
+      "rmse_sg_eaton_1p2": 0.6417,
+      "p10_p90_coverage": 0.524,
+      "band_width_sg": 0.0244
+    },
+    "offset_mean": {
+      "n_blind": 23,
+      "bias_sg": -0.0192,
+      "rmse_sg": 0.0214,
+      "mae_sg": 0.0204
+    },
+    "hydrostatic": {
+      "n_blind": 23,
+      "bias_sg": -0.127,
+      "rmse_sg": 0.1273,
+      "mae_sg": 0.127
+    }
+  },
+  "sensitivity_rmse_by_normal_interval": {
+    "350-700": {
+      "d_surface_rpm": 0.161,
+      "d": 0.0778,
+      "Dxc_vendor": 0.0274,
+      "Dxc": 0.1335,
+      "N_hat": 0.0747,
+      "offset_mean": 0.0214,
+      "hydrostatic": 0.1273
+    },
+    "350-950": {
+      "d_surface_rpm": 0.0307,
+      "d": 0.0272,
+      "Dxc_vendor": 0.0274,
+      "Dxc": 0.0158,
+      "N_hat": 0.0152,
+      "offset_mean": 0.0214,
+      "hydrostatic": 0.1273
+    },
+    "600-950": {
+      "d_surface_rpm": 0.0373,
+      "d": 0.0288,
+      "Dxc_vendor": NaN,
+      "Dxc": 0.0141,
+      "N_hat": 0.0128,
+      "offset_mean": 0.0214,
+      "hydrostatic": 0.1273
+    },
+    "350-1350": {
+      "d_surface_rpm": 0.0308,
+      "d": 0.0276,
+      "Dxc_vendor": 0.144,
+      "Dxc": 0.0158,
+      "N_hat": 0.0151,
+      "offset_mean": 0.0214,
+      "hydrostatic": 0.1273
+    },
+    "350-2300": {
+      "d_surface_rpm": 0.0322,
+      "d": 0.0485,
+      "Dxc_vendor": 0.1318,
+      "Dxc": 0.1303,
+      "N_hat": 0.1353,
+      "offset_mean": 0.0214,
+      "hydrostatic": 0.1273
+    }
+  }
+}
