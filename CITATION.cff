@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "nhat-drilling-exponent: an open normalized drilling exponent (N-hat) for pore-pressure work"
+authors:
+  - family-names: Ali
+    given-names: Rajab
+    affiliation: "Shanghai Shenkai Petroleum Science and Technology Co. Ltd."
+version: 1.0.0
+date-released: 2026-10-21
+license: MIT
+repository-code: "https://github.com/hadree512/nhat-drilling-exponent"
+keywords: [d-exponent, pore pressure, overpressure, drilling data, Volve, Utah FORGE]

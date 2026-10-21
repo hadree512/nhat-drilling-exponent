@@ -130,7 +130,7 @@ def fig_forge_exponents(res, out):
     fig.suptitle("FORGE granite: exponents, normal trend with P10–P90 band and alarms (red ticks)",
                  fontsize=9.5)
     fig.tight_layout()
-    save(fig, out, "fig03_forge_granite_exponents.png")
+    save(fig, out, "fig05_forge_granite_exponents.png")
 
 
 def fig_forge_metrics(res, out):
@@ -150,7 +150,7 @@ def fig_forge_metrics(res, out):
         a.set_title(lab, fontsize=8.5)
         a.grid(axis="x", visible=False)
     fig.tight_layout()
-    save(fig, out, "fig04_forge_metrics.png")
+    save(fig, out, "fig06_forge_metrics.png")
 
 
 # ------------------------------------------------------------------ Volve
@@ -191,7 +191,7 @@ def fig_volve_logs(res, out):
     axs[0].invert_yaxis()
     fig.suptitle("Volve 15/9-F-1 (calibration well)", fontsize=9.5)
     fig.tight_layout()
-    save(fig, out, "fig05_volve_f1_logs.png")
+    save(fig, out, "fig03_volve_f1_logs.png")
 
 
 def fig_volve_pressure(res, out):
@@ -217,7 +217,7 @@ def fig_volve_pressure(res, out):
     fig.suptitle("Blind pore-pressure prediction against formation pressure tests "
                  "(N̂ bars: P10–P90)", fontsize=9.5)
     fig.tight_layout()
-    save(fig, out, "fig06_volve_blind_profiles.png")
+    save(fig, out, "fig07_volve_blind_profiles.png")
 
 
 def fig_volve_crossplot(res, out):
@@ -237,7 +237,7 @@ def fig_volve_crossplot(res, out):
     ax.set_title("Blind wells F-1 B and F-1 C (±0.02 sg shaded)", fontsize=8.5)
     ax.legend(fontsize=6.3, loc="upper left")
     fig.tight_layout()
-    save(fig, out, "fig07_volve_crossplot.png")
+    save(fig, out, "fig08_volve_crossplot.png")
 
 
 def fig_volve_skill(res, out):
@@ -271,7 +271,7 @@ def fig_volve_skill(res, out):
     a.legend(fontsize=6.8, loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
     a.grid(axis="x", visible=False)
     fig.tight_layout()
-    save(fig, out, "fig08_volve_skill.png")
+    save(fig, out, "fig09_volve_skill.png")
 
 
 def fig_sensitivity(res, out):
@@ -295,7 +295,7 @@ def fig_sensitivity(res, out):
     ax.legend(fontsize=6.5, ncol=3, loc="upper center", bbox_to_anchor=(0.5, -0.2))
     ax.grid(axis="x", visible=False)
     fig.tight_layout()
-    save(fig, out, "fig09_volve_sensitivity.png")
+    save(fig, out, "fig10_volve_sensitivity.png")
 
 
 def fig_ablation(res, out):
@@ -320,7 +320,7 @@ def fig_ablation(res, out):
     axs[0].set_yticks(range(len(ylab)), ylab, fontsize=7)
     axs[0].invert_yaxis()
     fig.tight_layout()
-    save(fig, out, "fig10_ablation.png")
+    save(fig, out, "fig11_ablation.png")
 
 
 def fig_response(res, out):
@@ -345,7 +345,7 @@ def fig_response(res, out):
     ax.legend(fontsize=7, loc="upper left")
     ax.set_title("Rotary-speed response, Volve F-1 shales", fontsize=8.5)
     fig.tight_layout()
-    save(fig, out, "fig11_rpm_response.png")
+    save(fig, out, "fig04_rpm_response.png")
 
 
 def main(res, out):
