@@ -48,6 +48,12 @@ class NHatConfig:
     warn_ratio: float = 0.85
     severe_ratio: float = 0.70
     persistence_ft: int = 30           # an alarm must persist this many feet
+    # switches for ablation studies (all on = full N-hat)
+    use_bit_rpm: bool = True           # surface + motor speed instead of surface only
+    use_alpha: bool = True             # fitted rotary-speed exponent (off = 1, as in d)
+    use_hydraulics: bool = True
+    use_dynamics: bool = True
+    use_wear: bool = True
     fitted: dict = field(default_factory=dict)
 
 
@@ -126,7 +132,8 @@ class NHat:
     def prepare(self, df):
         c = self.cfg
         df = df.copy()
-        df["N_bit"] = bit_rpm(df["RPM_surface"], df.get("Motor_rpm"))
+        motor = df.get("Motor_rpm") if c.use_bit_rpm else None
+        df["N_bit"] = bit_rpm(df["RPM_surface"], motor)
         ecd = df["ECD_ppg"] if "ECD_ppg" in df else df["MW_ppg"]
         df["d"] = d_exponent(df["ROP_fph"], df["N_bit"], df["WOB_klbf"], df["Bit_in"])
         df["d_surface_rpm"] = d_exponent(df["ROP_fph"], df["RPM_surface"].clip(lower=1),
@@ -202,11 +209,14 @@ class NHat:
     def transform(self, df):
         c, f = self.cfg, self.cfg.fitted
         df = df.copy()
-        k = df["Run"].map(f["k_run_per_Mrev"]).fillna(0.0)
+        k = df["Run"].map(f["k_run_per_Mrev"]).fillna(0.0) if c.use_wear else 0.0
+        alpha = f["alpha"] if c.use_alpha else 1.0
+        beta = f["beta"] if c.use_hydraulics else 0.0
+        g_ss, g_wh = (f["g_ss"], f["g_wh"]) if c.use_dynamics else (0.0, 0.0)
         ln_rstar = (np.log(df["ROP_fph"].clip(lower=0.1))
-                    - f["alpha"] * np.log(df["N_bit"].clip(lower=1) / c.rpm_ref)
-                    - f["beta"] * df["hyd_term"]
-                    - f["g_ss"] * df["SSI"] - f["g_wh"] * df["WI"]
+                    - alpha * np.log(df["N_bit"].clip(lower=1) / c.rpm_ref)
+                    - beta * df["hyd_term"]
+                    - g_ss * df["SSI"] - g_wh * df["WI"]
                     - k * df["n_rev"] / 1e6)
         df["ROP_star"] = np.exp(ln_rstar)
         ecd = df["ECD_ppg"] if "ECD_ppg" in df else df["MW_ppg"]

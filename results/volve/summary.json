@@ -145,5 +145,43 @@
       "offset_mean": 0.0214,
       "hydrostatic": 0.1273
     }
+  },
+  "ablation": {
+    "full N-hat": {
+      "blind_rmse_sg": 0.0152,
+      "blind_bias_sg": -0.0124,
+      "normal_scatter_mad": 0.0731,
+      "alpha": 0.515
+    },
+    "surface RPM only": {
+      "blind_rmse_sg": 0.0127,
+      "blind_bias_sg": -0.0076,
+      "normal_scatter_mad": 0.0791,
+      "alpha": 0.3
+    },
+    "alpha = 1": {
+      "blind_rmse_sg": 0.0132,
+      "blind_bias_sg": -0.0093,
+      "normal_scatter_mad": 0.0646,
+      "alpha": 0.515
+    },
+    "no vibration term": {
+      "blind_rmse_sg": 0.0183,
+      "blind_bias_sg": -0.0157,
+      "normal_scatter_mad": 0.0762,
+      "alpha": 0.515
+    },
+    "no wear term": {
+      "blind_rmse_sg": 0.0145,
+      "blind_bias_sg": -0.0114,
+      "normal_scatter_mad": 0.0731,
+      "alpha": 0.515
+    },
+    "mud weight instead of downhole ECD": {
+      "blind_rmse_sg": 0.0237,
+      "blind_bias_sg": -0.0223,
+      "normal_scatter_mad": 0.0824,
+      "alpha": 0.515
+    }
   }
 }

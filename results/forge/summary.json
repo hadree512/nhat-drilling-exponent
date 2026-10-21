@@ -1,0 +1,176 @@
+{
+  "sediment": {
+    "d_surface_rpm": {
+      "false_alarm_pct": 85.9,
+      "test_median_abs_log_dev": 0.5826,
+      "cal_band_width_log": 0.3844,
+      "trend_slope_per_10kft": 6.7621
+    },
+    "d": {
+      "false_alarm_pct": 85.8,
+      "test_median_abs_log_dev": 0.4456,
+      "cal_band_width_log": 0.2935,
+      "trend_slope_per_10kft": 5.5649
+    },
+    "Dxc": {
+      "false_alarm_pct": 85.8,
+      "test_median_abs_log_dev": 0.4565,
+      "cal_band_width_log": 0.2943,
+      "trend_slope_per_10kft": 5.5155
+    },
+    "N_hat": {
+      "false_alarm_pct": 85.8,
+      "test_median_abs_log_dev": 0.4682,
+      "cal_band_width_log": 0.2905,
+      "trend_slope_per_10kft": 5.5667
+    }
+  },
+  "sediment_fit": {
+    "depth": -15.388770012497641,
+    "ln_w": 0.38577561713766356,
+    "alpha": 1.2,
+    "beta": 0.0,
+    "g_ss": 0.0,
+    "g_wh": 0.0,
+    "n_calib": 1692,
+    "r2_calib": 0.3107411181094192
+  },
+  "granite": {
+    "d_surface_rpm": {
+      "false_alarm_pct": 6.5,
+      "test_median_abs_log_dev": 0.1007,
+      "cal_band_width_log": 1.6578,
+      "trend_slope_per_10kft": -0.5975,
+      "bit_change_jump_log_all_runs": 0.5404,
+      "n_bit_changes_all_runs": 13,
+      "bit_change_jump_log": 0.9586,
+      "n_bit_changes": 6,
+      "within_run_drift": 1.0438,
+      "test_scatter_mad_log": 0.1175
+    },
+    "d": {
+      "false_alarm_pct": 37.3,
+      "test_median_abs_log_dev": 0.1783,
+      "cal_band_width_log": 0.4323,
+      "trend_slope_per_10kft": 0.1956,
+      "bit_change_jump_log_all_runs": 0.3293,
+      "n_bit_changes_all_runs": 13,
+      "bit_change_jump_log": 0.2526,
+      "n_bit_changes": 6,
+      "within_run_drift": 0.1241,
+      "test_scatter_mad_log": 0.059
+    },
+    "Dxc": {
+      "false_alarm_pct": 33.9,
+      "test_median_abs_log_dev": 0.1723,
+      "cal_band_width_log": 0.4286,
+      "trend_slope_per_10kft": 0.1792,
+      "bit_change_jump_log_all_runs": 0.3293,
+      "n_bit_changes_all_runs": 13,
+      "bit_change_jump_log": 0.2526,
+      "n_bit_changes": 6,
+      "within_run_drift": 0.1241,
+      "test_scatter_mad_log": 0.0591
+    },
+    "N_hat": {
+      "false_alarm_pct": 31.2,
+      "test_median_abs_log_dev": 0.1683,
+      "cal_band_width_log": 0.4393,
+      "trend_slope_per_10kft": 0.586,
+      "bit_change_jump_log_all_runs": 0.317,
+      "n_bit_changes_all_runs": 13,
+      "bit_change_jump_log": 0.3009,
+      "n_bit_changes": 6,
+      "within_run_drift": 0.1318,
+      "test_scatter_mad_log": 0.061
+    }
+  },
+  "granite_fit": {
+    "depth": 4.638280853734039,
+    "ln_w": -1.3237386904552204,
+    "alpha": 0.3,
+    "beta": 0.3564064062803553,
+    "g_ss": -0.06014581014563314,
+    "g_wh": -1.0206929121887272,
+    "n_calib": 2260,
+    "r2_calib": 0.060268759209878064
+  },
+  "granite_k_run_per_Mrev": {
+    "4": -4.1738,
+    "5": -8.1216,
+    "6": -0.9628,
+    "9": -6.4486,
+    "10": -5.8352,
+    "14": -7.56,
+    "18": 0.0,
+    "22": -5.0659,
+    "23": -2.9119,
+    "29": 0.0,
+    "31": -11.6152,
+    "32": 0.0,
+    "34": 0.0,
+    "35": -0.9031,
+    "37": -1.397,
+    "38": -0.6287
+  },
+  "ablation": {
+    "full N-hat": {
+      "sediment_false_alarm_pct": 85.8,
+      "sediment_test_dev": 0.4682,
+      "granite_bit_change_jump": 0.3009,
+      "granite_within_run_drift": 0.1318,
+      "granite_scatter": 0.061,
+      "granite_false_alarm_pct": 31.2
+    },
+    "surface RPM only": {
+      "sediment_false_alarm_pct": 85.8,
+      "sediment_test_dev": 0.5126,
+      "granite_bit_change_jump": 0.2732,
+      "granite_within_run_drift": 0.6999,
+      "granite_scatter": 0.079,
+      "granite_false_alarm_pct": 6.7
+    },
+    "alpha = 1": {
+      "sediment_false_alarm_pct": 85.8,
+      "sediment_test_dev": 0.4565,
+      "granite_bit_change_jump": 0.2899,
+      "granite_within_run_drift": 0.148,
+      "granite_scatter": 0.0586,
+      "granite_false_alarm_pct": 18.4
+    },
+    "no hydraulics term": {
+      "sediment_false_alarm_pct": 85.8,
+      "sediment_test_dev": 0.4682,
+      "granite_bit_change_jump": 0.3009,
+      "granite_within_run_drift": 0.1318,
+      "granite_scatter": 0.0615,
+      "granite_false_alarm_pct": 16.2
+    },
+    "no vibration term": {
+      "sediment_false_alarm_pct": 85.8,
+      "sediment_test_dev": 0.4682,
+      "granite_bit_change_jump": 0.229,
+      "granite_within_run_drift": 0.1079,
+      "granite_scatter": 0.0589,
+      "granite_false_alarm_pct": 29.9
+    },
+    "no wear term": {
+      "sediment_false_alarm_pct": 85.8,
+      "sediment_test_dev": 0.4682,
+      "granite_bit_change_jump": 0.3072,
+      "granite_within_run_drift": 0.1449,
+      "granite_scatter": 0.0641,
+      "granite_false_alarm_pct": 49.2
+    }
+  },
+  "data": {
+    "rows_used": 9557,
+    "bit_runs_used": 18,
+    "surface_rpm_median": 50.0,
+    "bit_rpm_median": 177.62599999999998,
+    "mw_ppg_range": [
+      8.76,
+      9.3
+    ]
+  }
+}

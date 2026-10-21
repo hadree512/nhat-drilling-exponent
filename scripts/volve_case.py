@@ -26,6 +26,7 @@ WATER_DEPTH, AIR_GAP = 91.0, 54.9          # m, from the daily drilling reports
 RHO_N_SG = 1.03                            # normal (sea-water) pore gradient
 NORMAL_INTERVAL = (350, 950)               # m TVD, 26 in section, sea-water mud
 FIT_INTERVAL = (350, 2300)                 # m TVD, response coefficients
+CAL_WELL = "15_9-F-1"
 
 
 def fit_overburden(tables):
@@ -86,7 +87,7 @@ def test_windows(root, raw, tabs):
     return rows
 
 
-def evaluate(root, raw, tabs, model, cal_w, normal=(350, 950)):
+def evaluate(root, raw, tabs, model, cal_w, normal=NORMAL_INTERVAL):
     """Normal trend from the shallow shales of the calibration well; Eaton
     exponent fitted on the offset wells (F-1, F-1 A); blind on F-1 B, F-1 C."""
     from scipy.optimize import minimize_scalar
@@ -151,50 +152,78 @@ def score(comp):
     return metrics
 
 
-def main(root, out):
-    os.makedirs(out, exist_ok=True)
-    raw = {w: build_wellbore(root, w) for w in WELLS}
-    ob_par, ob_tvd, ob_sg = fit_overburden(raw.values())
-
-    cfg = NHatConfig(rho_normal_ppg=RHO_N_SG * SG2PPG, persistence_ft=10)
+def analyse(raw, ob_tvd, ob_sg, cfg, ecd_mode="downhole"):
+    """Prepare, fit (pilot) and transform all wellbores for one configuration."""
     model = NHat(cfg)
     tabs = {}
     for w, t in raw.items():
         t = prep(t)
+        if ecd_mode == "mud_weight":
+            t["ECD_ppg"] = t["MW_ppg"]
         t["is_shale"] = shale_mask(t)
         t = model.prepare(t)
         if "SS_dh" in t:                       # measured downhole stick-slip
             t["SSI"] = t["SS_dh"].fillna(0).clip(0, 1.5)
         t["OBG_sg"] = np.interp(t["TVD_m"], ob_tvd, ob_sg)
         tabs[w] = t
-
-    cal_w = "15_9-F-1"
-    c = tabs[cal_w]
-    # drilling-response coefficients: shales of the pilot above the reservoir
-    # section; normal compaction trend: shallow sea-water-drilled shales
+    c = tabs[CAL_WELL]
     cal = c["is_shale"] & c["TVD_m"].between(*FIT_INTERVAL)
     fitted = model.fit(c, cal)
-    for w, t in tabs.items():
-        tabs[w] = model.transform(t)
-        tabs[w].to_csv(os.path.join(out, f"{w}_nhat.csv"), index=False)
+    for w in tabs:
+        tabs[w] = model.transform(tabs[w])
+    return model, tabs, fitted
 
-    comp = evaluate(root, raw, tabs, model, cal_w, normal=NORMAL_INTERVAL)
+
+ABLATIONS = {
+    "full N-hat": ({}, "downhole"),
+    "surface RPM only": ({"use_bit_rpm": False}, "downhole"),
+    "alpha = 1": ({"use_alpha": False}, "downhole"),
+    "no vibration term": ({"use_dynamics": False}, "downhole"),
+    "no wear term": ({"use_wear": False}, "downhole"),
+    "mud weight instead of downhole ECD": ({}, "mud_weight"),
+}
+
+
+def main(root, out):
+    os.makedirs(out, exist_ok=True)
+    raw = {w: build_wellbore(root, w) for w in WELLS}
+    ob_par, ob_tvd, ob_sg = fit_overburden(raw.values())
+
+    base_cfg = dict(rho_normal_ppg=RHO_N_SG * SG2PPG, persistence_ft=10)
+    model, tabs, fitted = analyse(raw, ob_tvd, ob_sg, NHatConfig(**base_cfg))
+    for w, t in tabs.items():
+        t.to_csv(os.path.join(out, f"{w}_nhat.csv"), index=False)
+
+    comp = evaluate(root, raw, tabs, model, CAL_WELL, normal=NORMAL_INTERVAL)
     comp.to_csv(os.path.join(out, "pressure_comparison.csv"), index=False)
     metrics = score(comp)
+
     sens = {}
     for lo, hi in [(350, 700), (350, 950), (600, 950), (350, 1350), (350, 2300)]:
         sens[f"{lo}-{hi}"] = {k: v["rmse_sg"] for k, v in
-                              score(evaluate(root, raw, tabs, model, cal_w, (lo, hi))).items()}
+                              score(evaluate(root, raw, tabs, model, CAL_WELL, (lo, hi))).items()}
+
+    ablation = {}
+    for name, (flags, ecd_mode) in ABLATIONS.items():
+        m_, t_, f_ = analyse(raw, ob_tvd, ob_sg, NHatConfig(**base_cfg, **flags), ecd_mode)
+        sc = score(evaluate(root, raw, t_, m_, CAL_WELL, NORMAL_INTERVAL))["N_hat"]
+        cal_rows = t_[CAL_WELL][t_[CAL_WELL]["is_shale"] &
+                                t_[CAL_WELL]["TVD_m"].between(*NORMAL_INTERVAL)]
+        ablation[name] = {"blind_rmse_sg": sc["rmse_sg"], "blind_bias_sg": sc["bias_sg"],
+                          "normal_scatter_mad": round(float(np.nanmedian(np.abs(
+                              np.log(cal_rows["N_hat"]) - np.nanmedian(np.log(cal_rows["N_hat"]))))), 4),
+                          "alpha": round(f_["alpha"], 3)}
+
     summary = {"overburden": ob_par,
                "fitted": {k: v for k, v in fitted.items() if k != "k_run_per_Mrev"},
                "k_run_per_Mrev": {str(k): v for k, v in fitted["k_run_per_Mrev"].items()},
                "normal_interval_m": NORMAL_INTERVAL, "fit_interval_m": FIT_INTERVAL,
-               "metrics": metrics, "sensitivity_rmse_by_normal_interval": sens}
+               "metrics": metrics, "sensitivity_rmse_by_normal_interval": sens,
+               "ablation": ablation}
     with open(os.path.join(out, "summary.json"), "w") as fh:
         json.dump(summary, fh, indent=2, default=float)
-    print(json.dumps(summary, indent=2, default=float))
-    print(comp[["wellbore", "TVD_m", "measured_sg", "n_shale"] +
-               [f"{c}_pred" for c in METHODS]].round(3).to_string())
+    print(json.dumps({k: summary[k] for k in ("fitted", "metrics", "ablation")}, indent=1,
+                     default=float))
     return tabs, comp, summary
 
 
