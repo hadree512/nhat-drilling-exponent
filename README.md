@@ -2,7 +2,7 @@
 
 Open code and data behind the paper
 
-> **Ali, R. (2026). An open normalized drilling exponent for pore-pressure estimation: formulation and blind tests on two public wells.** *Manuscript submitted to Energy Science & Engineering.*
+> **Ali, R. (2026). An open normalized drilling exponent for pore-pressure estimation: formulation and blind tests on public North Sea and Utah well data.** *Manuscript submitted to Energy Science & Engineering.*
 
 N̂ ("N-hat") is a drilling exponent in the d-exponent family. Before the exponent is formed, the rate of penetration is brought to a reference drilling state, and every correction is written out in the code. The corrections cover:
 - bit speed, including the mud motor;
@@ -25,6 +25,11 @@ python scripts/forge_case.py  --data <forge_dir> --out results/forge
 python scripts/volve_case.py  --root <volve_dir> --out results/volve
 python scripts/volve_bootstrap.py
 python scripts/make_figures.py
+# 15/9-19 exploration wells (LIS reader needs Python <= 3.12, numpy < 2.3):
+python scripts/convert_volve_lis.py --root <volve_dir> --out <work>/lis
+python scripts/volve19_case.py --root <volve_dir> --lis <work>/lis --out results/volve19
+python scripts/addenda.py --root <volve_dir> --lis <work>/lis --out results/addenda
+python scripts/make_figures_addenda.py --lis <work>/lis
 ```
 
 The scripts take about five minutes on a laptop.
@@ -34,9 +39,12 @@ The scripts take about five minutes on a laptop.
 | Well | Source | Licence | What is used |
 |---|---|---|---|
 | Utah FORGE 16A(78)-32 | McLennan et al. (2021), Geothermal Data Repository, [doi:10.15121/1776602](https://doi.org/10.15121/1776602) | CC BY 4.0 | final mud log (LAS), daily drilling reports (PDF → text with `pdftotext -layout`), survey |
-| Volve 15/9-F-1, F-1 A, F-1 B, F-1 C | Equinor ASA, Volve field data village | Equinor Open Data Licence | mud-log DLIS, MWD composite DLIS, formation-pressure LAS |
+| Volve 15/9-F-1, F-1 A, F-1 B, F-1 C | Equinor ASA, Volve field data village | Equinor Open Data Licence | mud-log DLIS, MWD composite DLIS (incl. sonic), formation-pressure LAS |
+| Volve 15/9-19 A, BT2, S/SR | Equinor ASA, Volve field data village | Equinor Open Data Licence | 1990s mud-log and wireline LIS files; scanned formation-tester report of BT2 |
 
 **FORGE.** The processed one-foot depth table is in [`data/forge_16a/forge16a_depth_table.csv`](data/forge_16a/forge16a_depth_table.csv), built by [`nhat/io_forge.py`](nhat/io_forge.py). The bit runs are in [`bit_runs.csv`](data/forge_16a/bit_runs.csv), and the motor revolutions-per-gallon values read from the daily reports are in [`motor_rpg.csv`](data/forge_16a/motor_rpg.csv), with the source of each value. The raw files can be downloaded from the URLs listed in `nhat/io_forge.py`.
+
+**15/9-19 BT2.** The 23 formation-multi-tester pressures were transcribed from the scanned 1998 report and are in [`data/volve_15_9_19/fmt_15_9_19BT2.csv`](data/volve_15_9_19/fmt_15_9_19BT2.csv) with their source.
 
 **Volve.** The Volve files are not redistributed. Register at the Equinor data village, download the F-1 family, and arrange the files as `<root>/wells/<wellbore>/<category>/`. The categories needed are `mud_log`, `mwd_lwd` and `formation_pressure`. Only summary results are committed here, in [`results/volve/`](results/volve).
 
@@ -49,7 +57,11 @@ nhat/io_volve.py      Volve loaders (DLIS mud log, MWD, pressure tests, overburd
 scripts/forge_case.py     FORGE control-well study + ablation
 scripts/volve_case.py     Volve blind pore-pressure study + sensitivity + ablation
 scripts/volve_bootstrap.py  bootstrap confidence intervals
+scripts/convert_volve_lis.py  LIS -> CSV for the 15/9-19 wells
+scripts/volve19_case.py   second blind test (15/9-19 BT2, 1998)
+scripts/addenda.py        sonic benchmark, mud-gas ratios, mechanical specific energy
 scripts/make_figures.py   Figs. 1-11 of the paper
+scripts/make_figures_addenda.py  Figs. 12-15
 results/              summary JSON/CSV written by the scripts
 figures/              PNG figures (300 dpi)
 paper/                manuscript and supplementary material (Word)
@@ -65,7 +77,8 @@ paper/                manuscript and supplementary material (Word)
 | Eq. (8)–(10): response fit, R*, N̂ | [`NHat.fit`, `NHat.transform`](nhat/core.py) |
 | Eq. (11)–(12): normal trend, Eaton, P10/P90 | [`NHat.baseline`, `NHat.eaton`](nhat/core.py), [`scripts/volve_case.py · evaluate`](scripts/volve_case.py) |
 | Overburden (Eq. 13) | [`scripts/volve_case.py · fit_overburden`](scripts/volve_case.py) |
-| Tables 3–6 | `results/forge/summary.json`, `results/volve/summary.json`, `results/volve/bootstrap.json` |
+| Eqs. (14)–(17): gas ratios, normalised gas, MSE, sonic Eaton | [`scripts/addenda.py`](scripts/addenda.py) |
+| Tables 2–7 | `results/forge`, `results/volve`, `results/volve19`, `results/addenda` (summary.json files) |
 
 ## Licence
 

@@ -56,6 +56,7 @@ def load_mudlog(root, wellbore):
         "Gas_total": df.get("GASA"),
         "C1": df.get("MTHA"), "C2": df.get("ETHA"), "C3": df.get("PRPA"),
         "iC4": df.get("IBTA"), "nC4": df.get("NBTA"),
+        "iC5": df.get("IPNA"), "nC5": df.get("NPNA"),
         "LITH_code": df.get("LITH"),
     })
     # bit runs: a new run starts when bit-drilled distance or total bit

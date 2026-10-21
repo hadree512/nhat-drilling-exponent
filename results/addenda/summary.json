@@ -1,0 +1,76 @@
+{
+  "sonic": {
+    "trend": {
+      "well": "15/9-19 A",
+      "normal_tvd_m": [
+        1631.1712216,
+        1931.1712216
+      ],
+      "intercept": 4.556759321269093,
+      "slope_per_km": 0.17548798378089117,
+      "n_samples": 2608,
+      "dt_at_3km_us_ft": 161.29311061775377
+    },
+    "q10": -0.04573393221439659,
+    "q90": 0.02063011541250966,
+    "eaton_n_fitted": 0.050003661632363035,
+    "n_offset": 8,
+    "n_blind": 10,
+    "blind_rmse_sg": 0.15290153105098137,
+    "blind_bias_sg": -0.15267343403437414,
+    "blind_rmse_sg_n3": 5.265926631670702,
+    "ratio_median_blind": 1.7628397332925982
+  },
+  "gas": {
+    "15_9-F-1": {
+      "spearman_nhat_vs_normgas_deep_shale": 0.03,
+      "n_deep_shale": 224,
+      "reservoir_Wh_median": 10.21,
+      "reservoir_Bh_median": 17.32,
+      "reservoir_Ch_median": 0.546,
+      "shale_Wh_median_deep": 3.85,
+      "reservoir_class": "gas"
+    },
+    "15_9-F-1_B": {
+      "spearman_nhat_vs_normgas_deep_shale": -0.475,
+      "n_deep_shale": 81,
+      "reservoir_Wh_median": 13.25,
+      "reservoir_Bh_median": 17.26,
+      "reservoir_Ch_median": 0.456,
+      "shale_Wh_median_deep": 7.46,
+      "reservoir_class": "gas"
+    },
+    "15_9-F-1_C": {
+      "spearman_nhat_vs_normgas_deep_shale": -0.339,
+      "n_deep_shale": 242,
+      "reservoir_Wh_median": 12.46,
+      "reservoir_Bh_median": 17.83,
+      "reservoir_Ch_median": 0.518,
+      "shale_Wh_median_deep": 14.8,
+      "reservoir_class": "gas"
+    }
+  },
+  "mse": {
+    "15_9-F-1": {
+      "mse_median_ksi": 25.0,
+      "dysfunction_pct": 5.3,
+      "spearman_mse_vs_nhat_shale": -0.022
+    },
+    "15_9-F-1_B": {
+      "mse_median_ksi": 70.5,
+      "dysfunction_pct": 0.1,
+      "spearman_mse_vs_nhat_shale": 0.408
+    },
+    "15_9-F-1_C": {
+      "mse_median_ksi": 69.1,
+      "dysfunction_pct": 1.1,
+      "spearman_mse_vs_nhat_shale": 0.678
+    },
+    "blind_rmse_with_mse_filter": {
+      "d": 0.0291,
+      "Dxc": 0.0162,
+      "N_hat": 0.0159,
+      "Dxc_vendor": 0.0279
+    }
+  }
+}

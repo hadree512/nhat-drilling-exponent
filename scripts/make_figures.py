@@ -60,7 +60,7 @@ def fig_workflow(out):
               ((0.875, 0.62), (0.875, 0.42)), ((0.77, 0.27), (0.73, 0.27)), ((0.52, 0.27), (0.48, 0.27))]
     for a, b in arrows:
         ax.annotate("", xy=b, xytext=a, arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.0))
-    ax.text(0.125, 0.27, "Two public wells:\nUtah FORGE 16A(78)-32\nVolve 15/9-F-1, A, B, C", ha="center",
+    ax.text(0.125, 0.27, "Public data:\nUtah FORGE 16A(78)-32\nVolve 15/9-F-1, A, B, C\nVolve 15/9-19 BT2", ha="center",
             va="center", fontsize=7.4, color=MUTED, style="italic")
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)

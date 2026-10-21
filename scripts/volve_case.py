@@ -69,9 +69,20 @@ def prep(t):
 METHODS = ["d_surface_rpm", "d", "Dxc_vendor", "Dxc", "N_hat"]
 
 
+SEAL_MAX_ABOVE_M = 200.0   # search the seal up to this far above a test (TVD)
+SEAL_SAMPLES = 30          # number of deepest shale samples used
+
+
+def seal_window(tab, tvd, max_above=SEAL_MAX_ABOVE_M, n=SEAL_SAMPLES):
+    """The deepest `n` shale samples within `max_above` metres (TVD) above a
+    pressure test: the pressure is measured in the sand, the exponent is read
+    in the nearest overlying shale."""
+    w = tab[tab["is_shale"] & tab["TVD_m"].between(tvd - max_above, tvd)]
+    return w.sort_values("TVD_m").tail(n)
+
+
 def test_windows(root, raw, tabs):
-    """Formation pressure tests with the shale samples in the 50 m (TVD) above
-    each test: the pressure is read in the sand, the exponent in the seal."""
+    """Formation pressure tests with the seal-shale window of each test."""
     rows = []
     for w in PRESSURE_WELLS:
         fp = load_pressures(root, w)
@@ -80,48 +91,86 @@ def test_windows(root, raw, tabs):
         fp["TVD_m"] = np.interp(fp["MD_m"], ref["MD_m"], ref["TVD_m"])
         fp["EMW_sg"] = fp["P_bar"] / (0.0980665 * fp["TVD_m"])
         for _, p in fp.iterrows():
-            win = host[host["is_shale"] & host["TVD_m"].between(p.TVD_m - 50, p.TVD_m)]
+            win = seal_window(host, p.TVD_m)
             rows.append({"wellbore": w, "test_no": int(p.PRES_TST_NO), "MD_m": p.MD_m,
                          "TVD_m": p.TVD_m, "measured_sg": p.EMW_sg, "quality": p.Quality,
                          "win": win, "OBG_sg": float(np.interp(p.TVD_m, host.TVD_m, host.OBG_sg))})
     return rows
 
 
+def eaton_sg(n, ratio, obg):
+    return obg - (obg - RHO_N_SG) * np.clip(ratio, 0.05, 3) ** n
+
+
+def fit_method(cal, col, normal, off_windows, off_obg, off_measured):
+    """Normal trend of `col` on the calibration well's shales inside `normal`
+    (median regression on TVD) and Eaton exponent fitted on offset tests."""
+    from scipy.optimize import minimize_scalar
+    from sklearn.linear_model import QuantileRegressor
+    m = cal["is_shale"] & cal["TVD_m"].between(*normal) & (cal[col] > 0.05)
+    if m.sum() < 30:                          # e.g. vendor Dxc is blank over 580-1350 m
+        return None
+    qr = QuantileRegressor(quantile=0.5, alpha=0.0, solver="highs").fit(
+        cal.loc[m, ["TVD_m"]] / 1000, np.log(cal.loc[m, col]))
+    res = np.log(cal.loc[m, col]) - qr.predict(cal.loc[m, ["TVD_m"]] / 1000)
+    q10, q90 = np.quantile(res, [0.10, 0.90])
+    fit = {"col": col, "qr": qr, "q10": q10, "q90": q90}
+    ratio = np.array([window_ratio(fit, w) for w in off_windows])
+    ok = np.isfinite(ratio)
+    n = minimize_scalar(lambda n: np.mean((eaton_sg(n, ratio[ok], off_obg[ok]) - off_measured[ok]) ** 2),
+                        bounds=(0.05, 6), method="bounded").x
+    fit["n"] = n
+    return fit
+
+
+def window_ratio(fit, win):
+    """Median ratio of the exponent to its normal trend in a window of samples."""
+    col = fit["col"]
+    win = win[np.isfinite(win[col]) & (win[col] > 0)] if len(win) else win
+    if not len(win):
+        return np.nan
+    return float(np.median(win[col] / np.exp(fit["qr"].predict(win[["TVD_m"]] / 1000))))
+
+
+def predict(fit, win, obg, n=None):
+    n = fit["n"] if n is None else n
+    r = window_ratio(fit, win)
+    return (eaton_sg(n, r, obg), eaton_sg(n, r * np.exp(-fit["q10"]), obg),
+            eaton_sg(n, r * np.exp(-fit["q90"]), obg), r)
+
+
+def calibrate_all(root, raw, tabs, cal_w, normal=NORMAL_INTERVAL):
+    rows = test_windows(root, raw, tabs)
+    off = [r for r in rows if r["wellbore"] in (cal_w, "15_9-F-1_A")]
+    fits = {}
+    for col in METHODS:
+        fits[col] = fit_method(tabs[cal_w], col, normal, [r["win"] for r in off],
+                               np.array([r["OBG_sg"] for r in off]),
+                               np.array([r["measured_sg"] for r in off]))
+    return fits, rows
+
+
 def evaluate(root, raw, tabs, model, cal_w, normal=NORMAL_INTERVAL):
     """Normal trend from the shallow shales of the calibration well; Eaton
     exponent fitted on the offset wells (F-1, F-1 A); blind on F-1 B, F-1 C."""
-    from scipy.optimize import minimize_scalar
-    from sklearn.linear_model import QuantileRegressor
-    cal = tabs[cal_w]
-    rows = test_windows(root, raw, tabs)
+    fits, rows = calibrate_all(root, raw, tabs, cal_w, normal)
     out = pd.DataFrame([{k: v for k, v in r.items() if k != "win"} for r in rows])
     out["blind"] = ~out["wellbore"].isin([cal_w, "15_9-F-1_A"])
     out["n_shale"] = [len(r["win"]) for r in rows]
     for col in METHODS:
-        m = cal["is_shale"] & cal["TVD_m"].between(*normal) & (cal[col] > 0.05)
-        if m.sum() < 30:                      # e.g. vendor Dxc is blank over 580-1350 m
+        fit = fits[col]
+        if fit is None:
             for suf in ("ratio", "n", "pred", "P10", "P90", "pred_n12", "slope_per_km"):
                 out[f"{col}_{suf}"] = np.nan
             continue
-        qr = QuantileRegressor(quantile=0.5, alpha=0.0, solver="highs").fit(
-            cal.loc[m, ["TVD_m"]] / 1000, np.log(cal.loc[m, col]))
-        res = np.log(cal.loc[m, col]) - qr.predict(cal.loc[m, ["TVD_m"]] / 1000)
-        q10, q90 = np.quantile(res, [0.10, 0.90])
-        ratio = np.array([np.median(r["win"][col] / np.exp(qr.predict(r["win"][["TVD_m"]] / 1000)))
-                          if len(r["win"]) else np.nan for r in rows])
-        out[f"{col}_ratio"] = ratio
-        pp = lambda n, rr, ob: ob - (ob - RHO_N_SG) * np.clip(rr, 0.05, 3) ** n   # noqa: E731
-        off = (~out["blind"]) & np.isfinite(ratio)
-        fit = minimize_scalar(lambda n: np.mean((pp(n, ratio[off], out.OBG_sg[off]) -
-                                                 out.measured_sg[off]) ** 2),
-                              bounds=(0.05, 6), method="bounded")
-        n = fit.x
-        out[f"{col}_n"] = n
-        out[f"{col}_pred"] = pp(n, ratio, out.OBG_sg)
-        out[f"{col}_P10"] = pp(n, ratio * np.exp(-q10), out.OBG_sg)
-        out[f"{col}_P90"] = pp(n, ratio * np.exp(-q90), out.OBG_sg)
-        out[f"{col}_pred_n12"] = pp(1.2, ratio, out.OBG_sg)
-        out[f"{col}_slope_per_km"] = qr.coef_[0]
+        pr = [predict(fit, r["win"], r["OBG_sg"]) for r in rows]
+        out[f"{col}_pred"] = [p[0] for p in pr]
+        out[f"{col}_P10"] = [p[1] for p in pr]
+        out[f"{col}_P90"] = [p[2] for p in pr]
+        out[f"{col}_ratio"] = [p[3] for p in pr]
+        out[f"{col}_pred_n12"] = [predict(fit, r["win"], r["OBG_sg"], n=1.2)[0] for r in rows]
+        out[f"{col}_n"] = fit["n"]
+        out[f"{col}_slope_per_km"] = fit["qr"].coef_[0]
     # reference (null) predictors
     off_mean = out.loc[~out.blind, "measured_sg"].mean()
     out["offset_mean_pred"] = off_mean

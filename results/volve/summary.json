@@ -32,59 +32,59 @@
   ],
   "metrics": {
     "d_surface_rpm": {
-      "n_blind": 21,
-      "bias_sg": -0.0263,
-      "rmse_sg": 0.0307,
-      "mae_sg": 0.0277,
-      "eaton_n": 0.199,
+      "n_blind": 23,
+      "bias_sg": -0.0312,
+      "rmse_sg": 0.0334,
+      "mae_sg": 0.0312,
+      "eaton_n": 0.191,
       "trend_slope_per_km": 0.4345,
-      "rmse_sg_eaton_1p2": 0.3685,
-      "p10_p90_coverage": 0.524,
-      "band_width_sg": 0.0546
+      "rmse_sg_eaton_1p2": 0.3586,
+      "p10_p90_coverage": 0.391,
+      "band_width_sg": 0.0526
     },
     "d": {
-      "n_blind": 21,
-      "bias_sg": -0.0246,
-      "rmse_sg": 0.0272,
-      "mae_sg": 0.0246,
-      "eaton_n": 0.13,
+      "n_blind": 23,
+      "bias_sg": -0.0274,
+      "rmse_sg": 0.0288,
+      "mae_sg": 0.0274,
+      "eaton_n": 0.127,
       "trend_slope_per_km": 0.4442,
-      "rmse_sg_eaton_1p2": 0.5418,
-      "p10_p90_coverage": 0.143,
-      "band_width_sg": 0.0238
+      "rmse_sg_eaton_1p2": 0.5349,
+      "p10_p90_coverage": 0.043,
+      "band_width_sg": 0.0232
     },
     "Dxc_vendor": {
-      "n_blind": 21,
-      "bias_sg": -0.0259,
-      "rmse_sg": 0.0274,
-      "mae_sg": 0.0259,
-      "eaton_n": 0.121,
+      "n_blind": 23,
+      "bias_sg": -0.0265,
+      "rmse_sg": 0.028,
+      "mae_sg": 0.0265,
+      "eaton_n": 0.119,
       "trend_slope_per_km": 0.3323,
-      "rmse_sg_eaton_1p2": 0.5666,
-      "p10_p90_coverage": 0.143,
-      "band_width_sg": 0.0206
+      "rmse_sg_eaton_1p2": 0.5652,
+      "p10_p90_coverage": 0.087,
+      "band_width_sg": 0.0203
     },
     "Dxc": {
-      "n_blind": 21,
-      "bias_sg": -0.0121,
-      "rmse_sg": 0.0158,
-      "mae_sg": 0.0148,
-      "eaton_n": 0.121,
+      "n_blind": 23,
+      "bias_sg": -0.0145,
+      "rmse_sg": 0.0165,
+      "mae_sg": 0.0154,
+      "eaton_n": 0.118,
       "trend_slope_per_km": 0.3452,
-      "rmse_sg_eaton_1p2": 0.6214,
-      "p10_p90_coverage": 0.476,
-      "band_width_sg": 0.0222
+      "rmse_sg_eaton_1p2": 0.6186,
+      "p10_p90_coverage": 0.304,
+      "band_width_sg": 0.0217
     },
     "N_hat": {
-      "n_blind": 21,
-      "bias_sg": -0.0124,
-      "rmse_sg": 0.0152,
-      "mae_sg": 0.0138,
-      "eaton_n": 0.115,
+      "n_blind": 23,
+      "bias_sg": -0.0135,
+      "rmse_sg": 0.0158,
+      "mae_sg": 0.0144,
+      "eaton_n": 0.112,
       "trend_slope_per_km": 0.3502,
-      "rmse_sg_eaton_1p2": 0.6417,
-      "p10_p90_coverage": 0.524,
-      "band_width_sg": 0.0244
+      "rmse_sg_eaton_1p2": 0.6453,
+      "p10_p90_coverage": 0.348,
+      "band_width_sg": 0.0237
     },
     "offset_mean": {
       "n_blind": 23,
@@ -101,85 +101,85 @@
   },
   "sensitivity_rmse_by_normal_interval": {
     "350-700": {
-      "d_surface_rpm": 0.161,
-      "d": 0.0778,
-      "Dxc_vendor": 0.0274,
-      "Dxc": 0.1335,
-      "N_hat": 0.0747,
+      "d_surface_rpm": 0.16,
+      "d": 0.0808,
+      "Dxc_vendor": 0.028,
+      "Dxc": 0.1323,
+      "N_hat": 0.0622,
       "offset_mean": 0.0214,
       "hydrostatic": 0.1273
     },
     "350-950": {
-      "d_surface_rpm": 0.0307,
-      "d": 0.0272,
-      "Dxc_vendor": 0.0274,
-      "Dxc": 0.0158,
-      "N_hat": 0.0152,
+      "d_surface_rpm": 0.0334,
+      "d": 0.0288,
+      "Dxc_vendor": 0.028,
+      "Dxc": 0.0165,
+      "N_hat": 0.0158,
       "offset_mean": 0.0214,
       "hydrostatic": 0.1273
     },
     "600-950": {
-      "d_surface_rpm": 0.0373,
-      "d": 0.0288,
+      "d_surface_rpm": 0.042,
+      "d": 0.0319,
       "Dxc_vendor": NaN,
-      "Dxc": 0.0141,
-      "N_hat": 0.0128,
+      "Dxc": 0.0137,
+      "N_hat": 0.0137,
       "offset_mean": 0.0214,
       "hydrostatic": 0.1273
     },
     "350-1350": {
-      "d_surface_rpm": 0.0308,
-      "d": 0.0276,
-      "Dxc_vendor": 0.144,
-      "Dxc": 0.0158,
-      "N_hat": 0.0151,
+      "d_surface_rpm": 0.0335,
+      "d": 0.0296,
+      "Dxc_vendor": 0.1426,
+      "Dxc": 0.0165,
+      "N_hat": 0.0157,
       "offset_mean": 0.0214,
       "hydrostatic": 0.1273
     },
     "350-2300": {
-      "d_surface_rpm": 0.0322,
-      "d": 0.0485,
-      "Dxc_vendor": 0.1318,
-      "Dxc": 0.1303,
-      "N_hat": 0.1353,
+      "d_surface_rpm": 0.0357,
+      "d": 0.0539,
+      "Dxc_vendor": 0.1305,
+      "Dxc": 0.1291,
+      "N_hat": 0.1332,
       "offset_mean": 0.0214,
       "hydrostatic": 0.1273
     }
   },
   "ablation": {
     "full N-hat": {
-      "blind_rmse_sg": 0.0152,
-      "blind_bias_sg": -0.0124,
+      "blind_rmse_sg": 0.0158,
+      "blind_bias_sg": -0.0135,
       "normal_scatter_mad": 0.0731,
       "alpha": 0.515
     },
     "surface RPM only": {
-      "blind_rmse_sg": 0.0127,
-      "blind_bias_sg": -0.0076,
+      "blind_rmse_sg": 0.0131,
+      "blind_bias_sg": -0.0097,
       "normal_scatter_mad": 0.0791,
       "alpha": 0.3
     },
     "alpha = 1": {
-      "blind_rmse_sg": 0.0132,
-      "blind_bias_sg": -0.0093,
+      "blind_rmse_sg": 0.0135,
+      "blind_bias_sg": -0.0107,
       "normal_scatter_mad": 0.0646,
       "alpha": 0.515
     },
     "no vibration term": {
-      "blind_rmse_sg": 0.0183,
-      "blind_bias_sg": -0.0157,
+      "blind_rmse_sg": 0.019,
+      "blind_bias_sg": -0.0173,
       "normal_scatter_mad": 0.0762,
       "alpha": 0.515
     },
     "no wear term": {
-      "blind_rmse_sg": 0.0145,
-      "blind_bias_sg": -0.0114,
+      "blind_rmse_sg": 0.0148,
+      "blind_bias_sg": -0.0125,
       "normal_scatter_mad": 0.0731,
       "alpha": 0.515
     },
     "mud weight instead of downhole ECD": {
-      "blind_rmse_sg": 0.0237,
-      "blind_bias_sg": -0.0223,
+      "blind_rmse_sg": 0.0226,
+      "blind_bias_sg": -0.0211,
       "normal_scatter_mad": 0.0824,
       "alpha": 0.515
     }

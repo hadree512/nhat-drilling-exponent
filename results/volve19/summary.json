@@ -1,0 +1,97 @@
+{
+  "n_tests": 23,
+  "n_hugin": 17,
+  "measured_hugin_sg": [
+    1.092,
+    1.094
+  ],
+  "measured_ty_sg": [
+    0.929,
+    0.932
+  ],
+  "eaton_n_from_F1": {
+    "d": 0.127,
+    "Dxc_vendor": 0.119,
+    "Dxc": 0.118,
+    "N_hat": 0.112
+  },
+  "bt2_rows": 1923,
+  "bt2_md_range_m": [
+    2257.0,
+    4250.0
+  ],
+  "bt2_mw_range_sg": [
+    1.4,
+    1.58
+  ],
+  "bt2_bit_rpm_median": 288.64996,
+  "trends_from_F1": {
+    "d": {
+      "intercept": -0.459098561998157,
+      "slope_per_km": 0.4442167275174398
+    },
+    "Dxc_vendor": {
+      "intercept": -0.39570066348424704,
+      "slope_per_km": 0.33232064826766344
+    },
+    "Dxc": {
+      "intercept": -0.4009119411805675,
+      "slope_per_km": 0.3451743833768325
+    },
+    "N_hat": {
+      "intercept": -0.49019018667578074,
+      "slope_per_km": 0.35024711302448164
+    }
+  },
+  "metrics": {
+    "Hugin": {
+      "d": {
+        "n": 17,
+        "rmse_sg": 0.0213,
+        "bias_sg": 0.0213
+      },
+      "Dxc_vendor": {
+        "n": 17,
+        "rmse_sg": 0.0271,
+        "bias_sg": 0.0271
+      },
+      "Dxc": {
+        "n": 17,
+        "rmse_sg": 0.0305,
+        "bias_sg": 0.0305
+      },
+      "N_hat": {
+        "n": 17,
+        "rmse_sg": 0.0373,
+        "bias_sg": 0.0373
+      },
+      "FPPG_contractor": {
+        "n": 17,
+        "rmse_sg": 0.1978,
+        "bias_sg": 0.1978
+      },
+      "offset_mean": {
+        "n": 17,
+        "rmse_sg": 0.0455,
+        "bias_sg": 0.0455
+      },
+      "hydrostatic": {
+        "n": 17,
+        "rmse_sg": 0.0622,
+        "bias_sg": -0.0622
+      }
+    },
+    "Ty (depleted)": {
+      "offset_mean": {
+        "n": 6,
+        "rmse_sg": 0.2077,
+        "bias_sg": 0.2077
+      },
+      "hydrostatic": {
+        "n": 6,
+        "rmse_sg": 0.1,
+        "bias_sg": 0.1
+      }
+    }
+  }
+}
